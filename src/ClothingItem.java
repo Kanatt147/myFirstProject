@@ -7,12 +7,12 @@ public class ClothingItem {
     private int stock;
 
     public ClothingItem(int itemId, String name, String size, double price, String brand, int stock) {
-        this.itemId = itemId;
-        this.name = name;
-        this.size = size;
-        this.price = price;
-        this.brand = brand;
-        this.stock = stock;
+        setItemId(itemId);
+        setName(name);
+        setSize(size);
+        setPrice(price);
+        setBrand(brand);
+        setStock(stock);
     }
 
     public ClothingItem() {
@@ -24,52 +24,71 @@ public class ClothingItem {
         this.stock = 0;
     }
 
-    public int getItemId() {
-        return itemId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public int getStock() {
-        return stock;
-    }
+    public int getItemId() { return itemId; }
+    public String getName() { return name; }
+    public String getSize() { return size; }
+    public double getPrice() { return price; }
+    public String getBrand() { return brand; }
+    public int getStock() { return stock; }
 
     public void setItemId(int itemId) {
-        this.itemId = itemId;
+        if (itemId > 0) {
+            this.itemId = itemId;
+        } else {
+            System.out.println("Warning: Item ID must be positive! Setting to 0.");
+            this.itemId = 0;
+        }
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name.trim();
+        } else {
+            System.out.println("Warning: Item name cannot be empty! Keeping previous value.");
+            if (this.name == null) this.name = "Unknown";
+        }
     }
 
     public void setSize(String size) {
-        this.size = size;
+        if (size == null) {
+            System.out.println("Warning: Size cannot be null! Setting to M.");
+            this.size = "M";
+            return;
+        }
+        String s = size.trim().toUpperCase();
+        if (s.equals("S") || s.equals("M") || s.equals("L") || s.equals("XL") || s.equals("XXL")) {
+            this.size = s;
+        } else {
+            System.out.println("Warning: Invalid size! Allowed: S/M/L/XL/XXL. Setting to M.");
+            this.size = "M";
+        }
     }
 
     public void setPrice(double price) {
-        this.price = price;
+        if (price >= 0) {
+            this.price = price;
+        } else {
+            System.out.println("Warning: Price cannot be negative! Setting to 0.");
+            this.price = 0.0;
+        }
     }
 
     public void setBrand(String brand) {
-        this.brand = brand;
+        if (brand != null && !brand.trim().isEmpty()) {
+            this.brand = brand.trim();
+        } else {
+            System.out.println("Warning: Brand cannot be empty! Keeping previous value.");
+            if (this.brand == null) this.brand = "Generic";
+        }
     }
 
     public void setStock(int stock) {
-        this.stock = stock;
+        if (stock >= 0) {
+            this.stock = stock;
+        } else {
+            System.out.println("Warning: Stock cannot be negative! Setting to 0.");
+            this.stock = 0;
+        }
     }
 
     public boolean isInStock() {
@@ -77,32 +96,39 @@ public class ClothingItem {
     }
 
     public boolean sellOne() {
-        if (this.stock <= 0) {
-            return false;
-        }
-        this.stock = this.stock - 1;
+        if (this.stock <= 0) return false;
+        this.stock--;
         return true;
     }
 
     public void restock(int amount) {
         if (amount <= 0) {
+            System.out.println("Warning: Restock amount must be positive!");
             return;
         }
-        this.stock = this.stock + amount;
+        this.stock += amount;
     }
 
     public void applyDiscount(double percent) {
-        if (percent <= 0) {
+        if (percent <= 0 || percent > 80) {
+            System.out.println("Warning: Discount must be between 1 and 80.");
             return;
-        }
-        if (percent > 80) {
-            percent = 80;
         }
         this.price = this.price * (1 - percent / 100.0);
     }
 
+    public String getFormattedPrice() {
+        return String.format("%.2f KZT", price);
+    }
+
     @Override
     public String toString() {
-        return "ClothingItem{itemId=" + itemId + ", name='" + name + "', size='" + size + "', price=" + price + ", brand='" + brand + "', stock=" + stock + "}";
+        return "ClothingItem{itemId=" + itemId +
+                ", name='" + name + '\'' +
+                ", size='" + size + '\'' +
+                ", price=" + String.format("%.2f", price) +
+                ", brand='" + brand + '\'' +
+                ", stock=" + stock +
+                '}';
     }
 }

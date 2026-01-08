@@ -1,100 +1,92 @@
 public class Employee {
-    private int employeeId;
-    private String name;
-    private String position;
-    private double hourlyRate;
-    private int salesMade;
-    private boolean active;
+    protected int employeeId;
+    protected String name;
+    protected double hourlyRate;
+    protected int experienceYears;
+    protected boolean active;
 
-    public Employee(int employeeId, String name, String position, double hourlyRate, int salesMade, boolean active) {
-        this.employeeId = employeeId;
-        this.name = name;
-        this.position = position;
-        this.hourlyRate = hourlyRate;
-        this.salesMade = salesMade;
-        this.active = active;
+    public Employee(int employeeId, String name, double hourlyRate, int experienceYears, boolean active) {
+        setEmployeeId(employeeId);
+        setName(name);
+        setHourlyRate(hourlyRate);
+        setExperienceYears(experienceYears);
+        setActive(active);
     }
 
     public Employee() {
         this.employeeId = 0;
         this.name = "Unknown";
-        this.position = "Sales";
         this.hourlyRate = 0.0;
-        this.salesMade = 0;
+        this.experienceYears = 0;
         this.active = true;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public double getHourlyRate() {
-        return hourlyRate;
-    }
-
-    public int getSalesMade() {
-        return salesMade;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
+    public int getEmployeeId() { return employeeId; }
+    public String getName() { return name; }
+    public double getHourlyRate() { return hourlyRate; }
+    public int getExperienceYears() { return experienceYears; }
+    public boolean isActive() { return active; }
 
     public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+        if (employeeId > 0) this.employeeId = employeeId;
+        else {
+            System.out.println("Warning: Employee ID must be positive! Setting to 0.");
+            this.employeeId = 0;
+        }
     }
 
     public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
+        if (name != null && !name.trim().isEmpty()) this.name = name.trim();
+        else {
+            System.out.println("Warning: Employee name cannot be empty!");
+            if (this.name == null) this.name = "Unknown";
+        }
     }
 
     public void setHourlyRate(double hourlyRate) {
-        this.hourlyRate = hourlyRate;
+        if (hourlyRate >= 0) this.hourlyRate = hourlyRate;
+        else {
+            System.out.println("Warning: Hourly rate cannot be negative! Setting to 0.");
+            this.hourlyRate = 0.0;
+        }
     }
 
-    public void setSalesMade(int salesMade) {
-        this.salesMade = salesMade;
+    public void setExperienceYears(int experienceYears) {
+        if (experienceYears >= 0) this.experienceYears = experienceYears;
+        else {
+            System.out.println("Warning: Experience years cannot be negative! Setting to 0.");
+            this.experienceYears = 0;
+        }
     }
 
     public void setActive(boolean active) {
         this.active = active;
     }
 
-    public void recordSale() {
-        if (!this.active) {
-            return;
-        }
-        this.salesMade = this.salesMade + 1;
+    public void work() {
+        System.out.println(name + " is working in the store.");
     }
 
-    public boolean isTopSeller() {
-        return this.salesMade >= 10;
+    public String getRole() {
+        return "Employee";
+    }
+
+    public boolean isExperienced() {
+        return experienceYears >= 5;
     }
 
     public double calculateWeeklyPay(int hoursWorked) {
-        if (!this.active) {
-            return 0.0;
-        }
-        if (hoursWorked < 0) {
-            hoursWorked = 0;
-        }
-        return this.hourlyRate * hoursWorked;
+        if (!active) return 0.0;
+        if (hoursWorked < 0) hoursWorked = 0;
+        return hourlyRate * hoursWorked;
     }
 
     @Override
     public String toString() {
-        return "Employee{employeeId=" + employeeId + ", name='" + name + "', position='" + position + "', hourlyRate=" + hourlyRate + ", salesMade=" + salesMade + ", active=" + active + "}";
+        return "[" + getRole() + "] " + name +
+                " (ID: " + employeeId +
+                ", Rate: " + String.format("%.2f", hourlyRate) + " KZT/hr" +
+                ", Exp: " + experienceYears + " yrs" +
+                ", Active: " + active + ")";
     }
 }
