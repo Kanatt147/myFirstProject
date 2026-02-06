@@ -39,6 +39,27 @@ public abstract class Employee {
         this.experienceYears = experienceYears;
     }
 
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public int getExperienceYears() {
+        return experienceYears;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+
     public abstract void work();
     public abstract String getRole();
 
